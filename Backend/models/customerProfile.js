@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const service = require("./service.js");
+const customerEvaluation = require("./customerEvaluationorFeedaback.js");
+const libraryUser = require("./libraryUser.js");
 
 const customerProfileSchema = new mongoose.Schema({
   name: {
@@ -78,10 +81,15 @@ const customerProfileSchema = new mongoose.Schema({
     },
     default: null,
   },
-  service: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Services",
-  }],
+  service: {
+    type: service,
+  },
+  customerEvaluation: {
+    type: customerEvaluation
+  },
+  libraryUser : {
+    type: libraryUser
+  }
 });
 
 module.exports = mongoose.model("customerProfile", customerProfileSchema);

@@ -1,8 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { submitCustomerFeedback } = require("../controllers/customerFeedback");
+const {
+  submitCustomerFeedback,
+  fetchHistory,
+  deleteAllFeedback,
+} = require("../controllers/customerFeedback");
 
-
+router.get("/get-history", fetchHistory);
 router.post("/submit-feedback", submitCustomerFeedback);
+router.delete("/delete-feedback", deleteAllFeedback);
 
 module.exports = router;

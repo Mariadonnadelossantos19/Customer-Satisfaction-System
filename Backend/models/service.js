@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+
 const servicesSchema = new mongoose.Schema({
-  service: {
+  serviceName: {
     type: String,
     enum: [
       "Technology Needs Assessment",
@@ -8,7 +9,7 @@ const servicesSchema = new mongoose.Schema({
       "Technology Consultancy",
       "Project Proposal Preparation",
       "Packaging and Labeling",
-      "Techonology Training",
+      "Technology Training",
       "Technology Clinics/Forum",
       "Scholarship",
       "Laboratory (Metrology/Microbiology)",
@@ -20,38 +21,40 @@ const servicesSchema = new mongoose.Schema({
   otherService: {
     type: String,
     required: function () {
-      return this.service === "Others";
+      return this.serviceName === "Others";
     },
     default: null,
   },
   subService: {
     type: String,
-    enum: function () {
-      if (this.service === "Technology Transfer & Commercialization") {
-        return [
-          "Food Processing",
-          "Gifts, Housewares, Decors",
-          "Agriculture/ Horticulture",
-          "Aquaculture/Marine",
-          "Furniture",
-          "Metals & Engineering",
-          "Health and Pharma.",
-          "ICT",
-          "Others",
-        ];
-      } else if (this.service === "Technology Consultancy") {
-        return ["MPEX", "CAPE", "CPT", "Energy Audit", "Others"];
-      } else if (this.service === "Others") {
-        return ["Others"];
-      }
-      return [];
-    },
     required: function () {
       return (
-        this.service === "Technology Consultancy" ||
-        this.service === "Technology Transfer & Commercialization" ||
-        this.service === "Others"
+        this.serviceName === "Technology Consultancy" ||
+        this.serviceName === "Technology Transfer & Commercialization"
       );
+    },
+    validate: {
+      validator: function (value) {
+        if (!value) return true; // Skip validation if subService is not required
+        
+        const validSubServices = {
+          "Technology Transfer & Commercialization": [
+            "Food Processing",
+            "Gifts, Housewares, Decors",
+            "Agriculture/ Horticulture",
+            "Aquaculture/Marine",
+            "Furniture",
+            "Metals & Engineering",
+            "Health and Pharma.",
+            "ICT",
+            "Others",
+          ],
+          "Technology Consultancy": ["MPEX", "CAPE", "CPT", "Energy Audit", "Others"],
+        };
+
+        return validSubServices[this.serviceName]?.includes(value);
+      },
+      message: "Invalid subService for the selected serviceName.",
     },
     default: null,
   },
@@ -68,4 +71,4 @@ const servicesSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Services", servicesSchema);
+module.exports = servicesSchema;
