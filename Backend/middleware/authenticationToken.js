@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv");
 
-
 const authenticateToken = (req, res, next) => {
 
   const token = req.headers['authorization']?.split(' ')[1];
@@ -9,7 +8,6 @@ const authenticateToken = (req, res, next) => {
   if (!token) {
     return res.status(403).json({ message: 'Access denied, no token provided' });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
