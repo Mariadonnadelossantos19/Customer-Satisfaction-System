@@ -3,7 +3,6 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const adminRouter = require('./routes/adminRoute');
-const customerFeedbackRouter = require('./routes/customerFeedbackRoute')
 dotenv.config();
 
 const app = express();
@@ -19,7 +18,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
   .catch(err => console.log('Database connection error: ', err));
 
   app.use("/api/admin", adminRouter);
-  app.use("/api/feedback", customerFeedbackRouter )
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
